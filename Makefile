@@ -734,6 +734,15 @@ get-config-for-kset = $(lastword $(subst :, ,$(filter $(1):%,$(KCONFIG_MAP))))
 # for that sub-configuration.
 $(foreach conf, $(CONFIG_LIST), $(eval $(call make-config-rule,$(conf))))
 
+# Also, instantiate the rule for CONFIG_NAME itself, if it's not in CONFIG_LIST
+# and corresponds to an actual directory with source files.
+# This handles cases like 'haiku' which is a family name but also has its own config file.
+ifneq ($(filter $(CONFIG_NAME),$(CONFIG_LIST)),$(CONFIG_NAME))
+ifneq ($(wildcard $(CONFIG_PATH)/$(CONFIG_NAME)/.),)
+$(eval $(call make-config-rule,$(CONFIG_NAME)))
+endif
+endif
+
 # Instantiate the build rule for framework files. Use the CFLAGS for the
 # configuration family, which exists in the directory whose name is equal to
 # CONFIG_NAME. Note that this doesn't need to be in a loop since we expect

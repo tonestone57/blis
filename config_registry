@@ -67,3 +67,4 @@ sifive_x280: sifive_x280/sifive_rvv
 
 # Generic architectures.
 generic:     generic
+haiku:       generic
