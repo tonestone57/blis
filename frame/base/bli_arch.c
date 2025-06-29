@@ -326,6 +326,13 @@ arch_t bli_arch_query_id_impl( void )
 		#ifdef BLIS_FAMILY_GENERIC
 		id = BLIS_ARCH_GENERIC;
 		#endif
+
+		// Haiku configuration should default to generic architecture.
+		// This ensures 'id' is set if no other BLIS_FAMILY_XYZ matched,
+		// and BLIS_FAMILY_HAIKU is defined (which implies generic).
+		#ifdef BLIS_FAMILY_HAIKU
+		id = BLIS_ARCH_GENERIC;
+		#endif
 	}
 
 	if ( bli_arch_get_logging() )

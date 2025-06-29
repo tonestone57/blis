@@ -69,11 +69,19 @@ int bli_gks_init( void )
 	// bli_config.h.
 
 	#undef GENTCONF
-	#define GENTCONF( CONFIG, config ) \
-	\
-	bli_gks_register_cntx( PASTECH(BLIS_ARCH_,CONFIG), \
-	                       PASTEMAC(cntx_init_,config), \
-	                       PASTEMAC(cntx_init_,config,_ref) );
+	#ifdef BLIS_FAMILY_HAIKU
+	  // For Haiku, explicitly use GENERIC architecture for registration
+	  #define GENTCONF( CONFIG, config ) \
+	  bli_gks_register_cntx( BLIS_ARCH_GENERIC, \
+	                         PASTEMAC(cntx_init_,generic), \
+	                         PASTEMAC(cntx_init_,generic,_ref) );
+	#else
+	  // Original definition
+	  #define GENTCONF( CONFIG, config ) \
+	  bli_gks_register_cntx( PASTECH(BLIS_ARCH_,CONFIG), \
+	                         PASTEMAC(cntx_init_,config), \
+	                         PASTEMAC(cntx_init_,config,_ref) );
+	#endif
 
 	INSERT_GENTCONF
 
